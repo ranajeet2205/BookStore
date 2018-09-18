@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Book Store</string>
+    <string name="save">Save</string>
+    <string name="product_name">Product Name</string>
+    <string name="price">Price</string>
+    <string name="qunatity">Quantity</string>
+    <string name="supplier_details">Supplier Details</string>
+    <string name="book_name">Book Name</string>
+    <string name="e_g_25">e.g. 25</string>
+    <string name="_2">2</string>
+    <string name="supplier_name">Supplier Name</string>
+    <string name="supplier_phone_number">supplier phone number</string>
+    <string name="hello_world">Hello World</string>
+</resources>
