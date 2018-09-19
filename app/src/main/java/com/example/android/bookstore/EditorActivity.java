@@ -70,6 +70,7 @@ public class EditorActivity extends AppCompatActivity {
             Toast.makeText(this, "Error With Saving The data", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
     }

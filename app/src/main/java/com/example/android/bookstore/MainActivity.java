@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             int PriceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
             int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-            int supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            double supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
 
             while (cursor.moveToNext()) {
                 int currentId = cursor.getInt(idColumnIndex);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 int currentPrice = cursor.getInt(PriceColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
                 String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                int currentSupplierNumber = cursor.getInt(supplierNumberColumnIndex);
+                double currentSupplierNumber = cursor.getInt((int) supplierNumberColumnIndex);
 
                 dispalydata.append(("\n" + currentId + " - "
                         + currentProduct + " - "
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         + currentSupplierNumber));
 
             }
-            cursor.close();
+
         } finally {
             cursor.close();
         }
