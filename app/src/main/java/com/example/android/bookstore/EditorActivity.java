@@ -52,9 +52,9 @@ public class EditorActivity extends AppCompatActivity {
 
         int quantity = Integer.parseInt(quantityInt);
 
-        int supplierPhoneNumber = Integer.parseInt(supplierPhoneNumberInt);
-
         SQLiteDatabase database = bookDbHelper.getWritableDatabase();
+
+        //Content values used used to put the values to the database
 
         ContentValues values = new ContentValues();
 
@@ -62,7 +62,7 @@ public class EditorActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_PRICE, price);
         values.put(BookEntry.COLUMN_QUANTITY, quantity);
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberInt);
 
         long newRowId = database.insert(BookEntry.TABLE_NAME, null, values);
 
@@ -87,6 +87,7 @@ public class EditorActivity extends AppCompatActivity {
 
         if (menuId == R.id.save_btn) {
 
+            //Method to insert the data into database
             insertData();
 
         }

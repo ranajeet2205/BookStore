@@ -37,11 +37,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        TextView dispalydata = (TextView) findViewById(R.id.text_view_data);
+        dispalydata.setText(null);
         super.onStart();
         queryData();
     }
 
     private void queryData() {
+
+        //This method used to retrieve the data from the database
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             int PriceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
             int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-            double supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            int supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
 
             while (cursor.moveToNext()) {
                 int currentId = cursor.getInt(idColumnIndex);
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 int currentPrice = cursor.getInt(PriceColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
                 String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                double currentSupplierNumber = cursor.getInt((int) supplierNumberColumnIndex);
+                String  currentSupplierNumber = cursor.getString( supplierNumberColumnIndex);
 
                 dispalydata.append(("\n" + currentId + " - "
                         + currentProduct + " - "
