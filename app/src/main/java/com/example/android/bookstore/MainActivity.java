@@ -69,43 +69,47 @@ public class MainActivity extends AppCompatActivity {
 
         TextView dispalydata = (TextView) findViewById(R.id.text_view_data);
 
+        if (cursor.getCount() == 0) {
+            dispalydata.setText("No Data to display");
+        } else {
 
-        try {
-            dispalydata.append(BookEntry._ID + "-"
-                    + BookEntry.COLUMN_PRODUCT_NAME + " - "
-                    + BookEntry.COLUMN_PRICE + " - "
-                    + BookEntry.COLUMN_QUANTITY + " - "
-                    + BookEntry.COLUMN_SUPPLIER_NAME + " - "
-                    + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
 
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int productNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-            int PriceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-            int supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            try {
+                dispalydata.append(BookEntry._ID + "-"
+                        + BookEntry.COLUMN_PRODUCT_NAME + " - "
+                        + BookEntry.COLUMN_PRICE + " - "
+                        + BookEntry.COLUMN_QUANTITY + " - "
+                        + BookEntry.COLUMN_SUPPLIER_NAME + " - "
+                        + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
 
-            while (cursor.moveToNext()) {
-                int currentId = cursor.getInt(idColumnIndex);
-                String currentProduct = cursor.getString(productNameColumnIndex);
-                int currentPrice = cursor.getInt(PriceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                String  currentSupplierNumber = cursor.getString( supplierNumberColumnIndex);
+                int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
+                int productNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
+                int PriceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+                int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+                int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+                int supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
 
-                dispalydata.append(("\n" + currentId + " - "
-                        + currentProduct + " - "
-                        + currentPrice + " - "
-                        + currentQuantity + " - "
-                        + currentSupplierName + " - "
-                        + currentSupplierNumber));
+                while (cursor.moveToNext()) {
+                    int currentId = cursor.getInt(idColumnIndex);
+                    String currentProduct = cursor.getString(productNameColumnIndex);
+                    int currentPrice = cursor.getInt(PriceColumnIndex);
+                    int currentQuantity = cursor.getInt(quantityColumnIndex);
+                    String currentSupplierName = cursor.getString(supplierNameColumnIndex);
+                    String currentSupplierNumber = cursor.getString(supplierNumberColumnIndex);
 
+                    dispalydata.append(("\n" + currentId + " - "
+                            + currentProduct + " - "
+                            + currentPrice + " - "
+                            + currentQuantity + " - "
+                            + currentSupplierName + " - "
+                            + currentSupplierNumber));
+
+                }
+
+            } finally {
+                cursor.close();
             }
-
-        } finally {
-            cursor.close();
         }
+
     }
-
 }
-

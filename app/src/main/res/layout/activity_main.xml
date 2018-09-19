@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/size_18sp"
         app:fontFamily="sans-serif"
+        android:textColor="#0395be"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintLeft_toLeftOf="parent"
