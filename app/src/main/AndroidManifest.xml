@@ -24,6 +24,11 @@
                 android:value=".MainActivity"/>
 
         </activity>
+
+        <provider
+            android:authorities="com.example.android.bookstore"
+            android:name=".data.BookProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

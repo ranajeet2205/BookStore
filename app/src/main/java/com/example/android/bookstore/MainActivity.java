@@ -3,25 +3,52 @@ package com.example.android.bookstore;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.bookstore.data.BookContract.BookEntry;
 import com.example.android.bookstore.data.BookDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     FloatingActionButton fab;
 
     private BookDbHelper mDbHelper = new BookDbHelper(this);
 
+    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+    private static final int BOOK_LOADER = 0;
+
+    BookCursorAdapter mCursorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ListView bookListView = (ListView) findViewById(R.id.list);
+
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
+
+
+        mCursorAdapter = new BookCursorAdapter(this, null);
+
+        bookListView.setAdapter(mCursorAdapter);
 
         fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -32,84 +59,63 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
+    }
 
+
+
+    public void deleteAllData() {
+        int rowDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
+        Log.v("MainActivity", rowDeleted + "rows deleted");
     }
 
     @Override
-    protected void onStart() {
-        TextView dispalydata = (TextView) findViewById(R.id.text_view_data);
-        dispalydata.setText(null);
-        super.onStart();
-        queryData();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item_main, menu);
+        return true;
     }
 
-    private void queryData() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuId = item.getItemId();
+        if (menuId == R.id.delete_all_data) {
+            deleteAllData();
 
-        //This method used to retrieve the data from the database
+        }
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        return super.onOptionsItemSelected(item);
+    }
 
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         String[] projection = {
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
+                BookEntry.COLUMN_QUANTITY
         };
 
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,
+
+        return new CursorLoader(
+                this,
+                BookEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
-                null,
-                null,
-                null);
+                null
+        );
+    }
 
-        TextView dispalydata = (TextView) findViewById(R.id.text_view_data);
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 
-        if (cursor.getCount() == 0) {
-            dispalydata.setText("No Data to display");
-        } else {
+        mCursorAdapter.swapCursor(cursor);
+    }
 
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
-            try {
-                dispalydata.append(BookEntry._ID + "-"
-                        + BookEntry.COLUMN_PRODUCT_NAME + " - "
-                        + BookEntry.COLUMN_PRICE + " - "
-                        + BookEntry.COLUMN_QUANTITY + " - "
-                        + BookEntry.COLUMN_SUPPLIER_NAME + " - "
-                        + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
-
-                int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-                int productNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-                int PriceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-                int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-                int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-                int supplierNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-                while (cursor.moveToNext()) {
-                    int currentId = cursor.getInt(idColumnIndex);
-                    String currentProduct = cursor.getString(productNameColumnIndex);
-                    int currentPrice = cursor.getInt(PriceColumnIndex);
-                    int currentQuantity = cursor.getInt(quantityColumnIndex);
-                    String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                    String currentSupplierNumber = cursor.getString(supplierNumberColumnIndex);
-
-                    dispalydata.append(("\n" + currentId + " - "
-                            + currentProduct + " - "
-                            + currentPrice + " - "
-                            + currentQuantity + " - "
-                            + currentSupplierName + " - "
-                            + currentSupplierNumber));
-
-                }
-
-            } finally {
-                cursor.close();
-            }
-        }
-
+        mCursorAdapter.swapCursor(null);
     }
 }

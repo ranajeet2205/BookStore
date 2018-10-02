@@ -3,6 +3,7 @@ package com.example.android.bookstore;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,6 +27,8 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mSupplierPhoneNumber;
 
     public BookDbHelper bookDbHelper = new BookDbHelper(this);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class EditorActivity extends AppCompatActivity {
 
             //Method to insert the data into database
             insertData();
+        }
+        if (menuId==R.id.delete_btn){
 
         }
 

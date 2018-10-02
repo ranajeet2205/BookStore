@@ -11,4 +11,10 @@
     <string name="supplier_name">Supplier Name</string>
     <string name="supplier_phone_number">supplier phone number</string>
     <string name="hello_world">Hello World</string>
+    <string name="txt_price">Price:$</string>
+    <string name="delete">Delete</string>
+    <string name="delete_all_data">Delete All Data</string>
+    <string name="negative_sign">-</string>
+    <string name="positive_sign">+</string>
+    <string name="call">Call</string>
 </resources>
