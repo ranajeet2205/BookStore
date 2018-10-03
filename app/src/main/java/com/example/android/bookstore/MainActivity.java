@@ -35,13 +35,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int BOOK_LOADER = 0;
 
     BookCursorAdapter mCursorAdapter;
+    ListView bookListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView bookListView = (ListView) findViewById(R.id.list);
+         bookListView = (ListView) findViewById(R.id.list);
 
         mCursorAdapter = new BookCursorAdapter(this, null);
 
@@ -68,12 +69,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         getLoaderManager().initLoader(BOOK_LOADER, null, this);
-    }
-
-    @Override
-    protected void onStart() {
-        getLoaderManager().initLoader(BOOK_LOADER, null, this);
-        super.onStart();
     }
 
     public void deleteAllData() {
