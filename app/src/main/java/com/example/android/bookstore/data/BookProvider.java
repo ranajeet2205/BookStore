@@ -117,7 +117,7 @@ public class BookProvider extends ContentProvider {
 
     }
 
-    private Uri insertBook(Uri uri,ContentValues values){
+    private Uri insertBook(Uri uri, ContentValues values){
 
         SQLiteDatabase database = bookDbHelper.getWritableDatabase();
 
@@ -213,7 +213,7 @@ public class BookProvider extends ContentProvider {
 
 
         if (values.containsKey(BookEntry.COLUMN_PRICE)){
-            String bookPrice = values.getAsString(BookEntry.COLUMN_PRICE);
+            Integer bookPrice = values.getAsInteger(BookEntry.COLUMN_PRICE);
             if (bookPrice==null){
                 throw new IllegalArgumentException("Enter Book Price");
             }
@@ -221,7 +221,7 @@ public class BookProvider extends ContentProvider {
 
 
         if (values.containsKey(BookEntry.COLUMN_QUANTITY)){
-            String bookQuantity = values.getAsString(BookEntry.COLUMN_QUANTITY);
+            Integer bookQuantity = values.getAsInteger(BookEntry.COLUMN_QUANTITY);
             if (bookQuantity==null){
                 throw new IllegalArgumentException("Enter Book Quantity");
             }

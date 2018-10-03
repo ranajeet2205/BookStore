@@ -72,6 +72,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDecrementButton = (Button) findViewById(R.id.negative_btn);
         mCallButton = (Button) findViewById(R.id.call_btn);
 
+
+
+        /**
+         * Increment button which increase the quantity
+         */
         mIncrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +85,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 mQuantity.setText(Integer.toString(quantity));
             }
         });
+
+        /**
+         * Decrement button which decrease the quantity
+         */
 
         mDecrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +100,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
             }
         });
+
+        /**
+         * call Button which make a call to the given number
+         */
 
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +118,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     }
 
+    /**
+     * Insert book data in database
+     */
+
     private void insertData() {
 
         String productNameString = mProductName.getText().toString().trim();
-        String priceInt = mPrice.getText().toString().trim();
-        String quantityInt = mQuantity.getText().toString().trim();
+        String priceInt = String.valueOf(mPrice.getText().toString().trim());
+        String quantityInt = String.valueOf(mQuantity.getText().toString().trim());
         String supplierNameString = mSupplierName.getText().toString().trim();
         String supplierPhoneNumberInt = String.valueOf(mSupplierPhoneNumber.getText());
 
@@ -136,7 +153,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
             }
         } else {
-            int rowsAffected = getContentResolver().update(BookEntry.CONTENT_URI, values, null, null);
+            int rowsAffected = getContentResolver().update(mcurrenturi, values, null, null);
             if (rowsAffected == 0) {
                 Toast.makeText(this, "Data Updated Failed", Toast.LENGTH_SHORT).show();
             } else {
@@ -161,7 +178,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             //Method to insert the data into database
             insertData();
-
+            finish();
         }
         if (menuId == R.id.delete_btn) {
             showDeleteConfirmationDialog();
@@ -214,8 +231,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String supplierPhoneNumber = data.getString(supplierPhoneNumberColumnIndex);
 
             mProductName.setText(bookName);
-            mPrice.setText(Integer.toString(bookPrice));
-            mQuantity.setText(Integer.toString(bookQuantity));
+            mPrice.setText(String.valueOf(bookPrice));
+            mQuantity.setText(String.valueOf(bookQuantity));
             mSupplierName.setText(supplierName);
             mSupplierPhoneNumber.setText(supplierPhoneNumber);
         }
@@ -225,12 +242,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mProductName.setText("");
-        mPrice.setText(0);
-        mQuantity.setText(0);
+        mPrice.setText("");
+        mQuantity.setText("");
         mSupplierName.setText("");
         mSupplierPhoneNumber.setText("");
 
     }
+
+    /**
+     * Show Confirmation dialog to delete book data
+     */
 
     private void showDeleteConfirmationDialog() {
 
@@ -253,6 +274,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    /**
+     * DeleteBook Method which helps To delete Book data
+     */
 
     private void deleteBook() {
 

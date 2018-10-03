@@ -49,15 +49,16 @@ public class BookCursorAdapter extends CursorAdapter {
 
         final int bookId = cursor.getInt(bookIdColumnIndex);
         String bookName = cursor.getString(bookNameColumnIndex);
-        final int[] bookPrice = {cursor.getInt(bookPriceColumnIndex)};
+        final int bookPrice = cursor.getInt(bookPriceColumnIndex);
         final int[] bookQuantity = {cursor.getInt(bookQuantityColumnIndex)};
 
         bookNameTextView.setText(bookName);
-        bookPriceTextView.setText(Integer.toString(bookPrice[0]));
-        bookQuantityTextView.setText(Integer.toString(bookQuantity[0]));
+        bookPriceTextView.setText(String.valueOf(bookPrice));
+        bookQuantityTextView.setText(String.valueOf(bookQuantity[0]));
 
         /**
-         * Sale Button Clicked
+         * Sale Button onclickListener
+         * Which updates quantity
          */
 
         sale.setOnClickListener(new View.OnClickListener() {
