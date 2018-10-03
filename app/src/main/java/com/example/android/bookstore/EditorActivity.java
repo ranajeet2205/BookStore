@@ -110,7 +110,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_QUANTITY
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
         };
 
 

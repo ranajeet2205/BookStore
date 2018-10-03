@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI,id);
-                Intent intent = new Intent(MainActivity.this,EditorActivity.class);
 
+                Intent intent = new Intent(MainActivity.this,EditorActivity.class);
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI,id);
                 intent.setData(currentBookUri);
                 startActivity(intent);
             }
