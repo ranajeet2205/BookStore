@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,9 +81,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mIncrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                quantity = Integer.parseInt(mQuantity.getText().toString());
-                quantity++;
-                mQuantity.setText(Integer.toString(quantity));
+                if (TextUtils.isEmpty(mQuantity.getText().toString())){
+                    mQuantity.setText(String.valueOf(0));
+                }
+
+                if (mQuantity!=null) {
+                    quantity = Integer.parseInt(mQuantity.getText().toString());
+                    quantity++;
+                    mQuantity.setText(String.valueOf(quantity));
+                }
             }
         });
 
@@ -93,10 +100,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDecrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity > 0) {
+                if (TextUtils.isEmpty(mQuantity.getText().toString())){
+                    mQuantity.setText(String.valueOf(0));
+                }
+
+                if (mQuantity!=null&&quantity>0) {
                     quantity = Integer.parseInt(mQuantity.getText().toString());
                     quantity--;
-                    mQuantity.setText(Integer.toString(quantity));
+                    mQuantity.setText(String.valueOf(quantity));
                 }
             }
         });
@@ -116,6 +127,40 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+    }
+
+    public boolean valid(){
+        String productNameString = mProductName.getText().toString().trim();
+        String priceInt = String.valueOf(mPrice.getText().toString().trim());
+        String quantityInt = String.valueOf(mQuantity.getText().toString().trim());
+        String supplierNameString = mSupplierName.getText().toString().trim();
+        String supplierPhoneNumberInt = String.valueOf(mSupplierPhoneNumber.getText());
+
+
+        
+        if (TextUtils.isEmpty(productNameString)){
+            Toast.makeText(this, "Enter Book Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (TextUtils.isEmpty(priceInt)){
+            Toast.makeText(this, "Enter Price", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+       else if (TextUtils.isEmpty(quantityInt)){
+            Toast.makeText(this, "Enter Quantity", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (TextUtils.isEmpty(supplierNameString)){
+            Toast.makeText(this, "Enter Supplier Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (TextUtils.isEmpty(supplierPhoneNumberInt)){
+            Toast.makeText(this, "Enter Supplier Phone Number", Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            return true;
+        }
     }
 
     /**
@@ -161,7 +206,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
 
-        finish();
+
     }
 
     @Override
@@ -177,8 +222,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (menuId == R.id.save_btn) {
 
             //Method to insert the data into database
-            insertData();
-            finish();
+            if (valid()){
+                insertData();
+                finish();
+            }
+
         }
         if (menuId == R.id.delete_btn) {
             showDeleteConfirmationDialog();

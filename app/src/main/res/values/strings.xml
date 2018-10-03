@@ -21,4 +21,5 @@
     <string name="edit_data">Edit Data</string>
     <string name="cancel">Cancel</string>
     <string name="delete_dialog">Delete Book Details</string>
+    <string name="currently_there_is_no_data_to_show">Currently There Is No Data To Show Click Add Button</string>
 </resources>

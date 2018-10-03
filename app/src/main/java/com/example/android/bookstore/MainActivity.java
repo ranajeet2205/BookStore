@@ -38,16 +38,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     ListView bookListView;
 
+    TextView emptyView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        emptyView = (TextView)findViewById(R.id.empty_text_view);
 
          bookListView = (ListView) findViewById(R.id.list);
 
         mCursorAdapter = new BookCursorAdapter(this, null);
 
         bookListView.setAdapter(mCursorAdapter);
+
+        View emptyView = findViewById(R.id.empty_text_view);
+        bookListView.setEmptyView(emptyView);
 
         fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
