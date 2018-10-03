@@ -1,6 +1,10 @@
 package com.example.android.bookstore;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -14,7 +18,7 @@ import android.widget.Toast;
 import com.example.android.bookstore.data.BookContract.BookEntry;
 import com.example.android.bookstore.data.BookDbHelper;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private EditText mProductName;
 
@@ -27,8 +31,6 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mSupplierPhoneNumber;
 
     public BookDbHelper bookDbHelper = new BookDbHelper(this);
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class EditorActivity extends AppCompatActivity {
 
             //Method to insert the data into database
             insertData();
+            finish();
         }
         if (menuId==R.id.delete_btn){
 
@@ -101,4 +104,61 @@ public class EditorActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection={
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY
+        };
+
+
+        return new CursorLoader(
+                this,
+                BookEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data == null || data.getCount() < 1) {
+            return;
+        }
+
+        if (data.moveToFirst()){
+            int bookNameColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
+            int bookPriceColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int bookQuantityColumnIndex = data.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+            int supplierNameColumnIndex = data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+            int supplierPhoneNumberColumnIndex = data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+
+            String bookName = data.getString(bookNameColumnIndex);
+            int bookPrice = data.getInt(bookPriceColumnIndex);
+            int bookQuantity = data.getInt(bookQuantityColumnIndex);
+            String supplierName = data.getString(supplierNameColumnIndex);
+            String supplierPhoneNumber = data.getString(supplierPhoneNumberColumnIndex);
+
+            mProductName.setText(bookName);
+            mPrice.setText(Integer.toString(bookPrice));
+            mQuantity.setText(Integer.toString(bookQuantity));
+            mSupplierName.setText(supplierName);
+            mSupplierPhoneNumber.setText(supplierPhoneNumber);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mProductName.setText("");
+        mPrice.setText(0);
+        mQuantity.setText(0);
+        mSupplierName.setText("");
+        mSupplierPhoneNumber.setText("");
+
+    }
 }

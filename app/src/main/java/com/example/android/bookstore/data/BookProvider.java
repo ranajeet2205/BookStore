@@ -47,7 +47,6 @@ public class BookProvider extends ContentProvider {
 
         Cursor cursor;
 
-
         int matcher = mUriMatcher.match(uri);
 
         switch (matcher){

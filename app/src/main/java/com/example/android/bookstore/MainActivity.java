@@ -1,8 +1,10 @@
 package com.example.android.bookstore;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,10 +30,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     FloatingActionButton fab;
 
-    private BookDbHelper mDbHelper = new BookDbHelper(this);
-
-    SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
     private static final int BOOK_LOADER = 0;
 
     BookCursorAdapter mCursorAdapter;
@@ -42,8 +41,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         ListView bookListView = (ListView) findViewById(R.id.list);
 
-        View emptyView = findViewById(R.id.empty_view);
-        bookListView.setEmptyView(emptyView);
+
+//        View emptyView = findViewById(R.id.empty_view);
+//        bookListView.setEmptyView(emptyView);
 
 
         mCursorAdapter = new BookCursorAdapter(this, null);
@@ -55,6 +55,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI,id);
+                Intent intent = new Intent(MainActivity.this,EditorActivity.class);
+
+                intent.setData(currentBookUri);
                 startActivity(intent);
             }
         });

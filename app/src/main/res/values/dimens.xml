@@ -15,5 +15,22 @@
     <dimen name="size_166dp">166dp</dimen>
     <dimen name="size_188dp">188dp</dimen>
     <dimen name="size_21dp">21dp</dimen>
+
+    <dimen name="size_4dp">4dp</dimen>
+    <dimen name="size_10dp">10dp</dimen>
+    <dimen name="size_70dp">70dp</dimen>
+    <dimen name="size_29dp">29dp</dimen>
+    <dimen name="size_52dp">52dp</dimen>
+    <dimen name="size_91dp">91dp</dimen>
+    <dimen name="size_14dp">14dp</dimen>
+    <dimen name="size_239dp">239dp</dimen>
+
+    <dimen name="size_123dp">123dp</dimen>
+    <dimen name="size_38dp">38dp</dimen>
+    <dimen name="size_152dp">152dp</dimen>
     <dimen name="size_24dp">24dp</dimen>
+    <dimen name="size_119dp">119dp</dimen>
+    <dimen name="size_0dp">0dp</dimen>
+    <dimen name="size_235dp">235dp</dimen>
+
 </resources>
