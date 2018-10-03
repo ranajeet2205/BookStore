@@ -17,4 +17,8 @@
     <string name="negative_sign">-</string>
     <string name="positive_sign">+</string>
     <string name="call">Call</string>
+    <string name="new_data">New Data</string>
+    <string name="edit_data">Edit Data</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_dialog">Delete Book Details</string>
 </resources>

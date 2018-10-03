@@ -1,8 +1,11 @@
 package com.example.android.bookstore;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +34,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private EditText mSupplierPhoneNumber;
 
+    private Uri mcurrenturi;
+
+    private Button mIncrementButton;
+
+    private Button mDecrementButton;
+
+    private Button mCallButton;
+
+    public static final int EXISTING_BOOK_LOADER=0;
+
     public BookDbHelper bookDbHelper = new BookDbHelper(this);
 
     @Override
@@ -37,11 +51,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        Intent intent = getIntent();
+        mcurrenturi = intent.getData();
+        if (mcurrenturi==null){
+            setTitle(getString(R.string.new_data));
+            invalidateOptionsMenu();
+        }else{
+            setTitle(getString(R.string.edit_data));
+            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
+        }
+
         mProductName = (EditText) findViewById(R.id.product_name);
         mPrice = (EditText) findViewById(R.id.price);
         mQuantity = (EditText) findViewById(R.id.quantity);
         mSupplierName = (EditText) findViewById(R.id.supplier_name);
         mSupplierPhoneNumber = (EditText) findViewById(R.id.supplier_number);
+        mIncrementButton = (Button)findViewById(R.id.positive_btn);
+        mDecrementButton = (Button)findViewById(R.id.negative_btn);
+        mCallButton = (Button)findViewById(R.id.call_btn);
 
     }
 
@@ -57,8 +84,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         int quantity = Integer.parseInt(quantityInt);
 
-        SQLiteDatabase database = bookDbHelper.getWritableDatabase();
-
         //Content values used used to put the values to the database
 
         ContentValues values = new ContentValues();
@@ -69,13 +94,29 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberInt);
 
-        long newRowId = database.insert(BookEntry.TABLE_NAME, null, values);
+//        long newRowId = database.insert(BookEntry.TABLE_NAME, null, values);
+//
+//        if (newRowId == -1) {
+//            Toast.makeText(this, "Error With Saving The data", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+//            finish();
+//        }
 
-        if (newRowId == -1) {
-            Toast.makeText(this, "Error With Saving The data", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-            finish();
+        if (mcurrenturi==null){
+            Uri uri = getContentResolver().insert(BookEntry.CONTENT_URI,values);
+            if (uri==null){
+                Toast.makeText(this, "Insertion failed", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            int rowsAffected = getContentResolver().update(BookEntry.CONTENT_URI,values,null,null);
+            if (rowsAffected==0){
+                Toast.makeText(this, "Data Updated Failed", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Data Updated", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -97,6 +138,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             finish();
         }
         if (menuId==R.id.delete_btn){
+            showDeleteConfirmationDialog();
 
         }
 
@@ -118,7 +160,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         return new CursorLoader(
                 this,
-                BookEntry.CONTENT_URI,
+                mcurrenturi,
                 projection,
                 null,
                 null,
@@ -133,6 +175,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         if (data.moveToFirst()){
+
             int bookNameColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
             int bookPriceColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRICE);
             int bookQuantityColumnIndex = data.getColumnIndex(BookEntry.COLUMN_QUANTITY);
@@ -162,5 +205,49 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierName.setText("");
         mSupplierPhoneNumber.setText("");
 
+    }
+
+    private void showDeleteConfirmationDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                deleteBook();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteBook() {
+
+        if (mcurrenturi != null) {
+
+            int rowsDeleted = getContentResolver().delete(mcurrenturi, null, null);
+
+            if (rowsDeleted == 0) {
+
+                Toast.makeText(this, "Delete Failed",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+
+                Toast.makeText(this, "Delete Successful",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        finish();
     }
 }
