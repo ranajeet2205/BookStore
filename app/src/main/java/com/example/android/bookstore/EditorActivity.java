@@ -46,9 +46,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     int quantity;
 
-    public static final int EXISTING_BOOK_LOADER=0;
-
-    public BookDbHelper bookDbHelper = new BookDbHelper(this);
+    public static final int EXISTING_BOOK_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +55,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         Intent intent = getIntent();
         mcurrenturi = intent.getData();
-        if (mcurrenturi==null){
+        if (mcurrenturi == null) {
             setTitle(getString(R.string.new_data));
             invalidateOptionsMenu();
-        }else{
+        } else {
             setTitle(getString(R.string.edit_data));
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
@@ -70,9 +68,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantity = (EditText) findViewById(R.id.quantity);
         mSupplierName = (EditText) findViewById(R.id.supplier_name);
         mSupplierPhoneNumber = (EditText) findViewById(R.id.supplier_number);
-        mIncrementButton = (Button)findViewById(R.id.positive_btn);
-        mDecrementButton = (Button)findViewById(R.id.negative_btn);
-        mCallButton = (Button)findViewById(R.id.call_btn);
+        mIncrementButton = (Button) findViewById(R.id.positive_btn);
+        mDecrementButton = (Button) findViewById(R.id.negative_btn);
+        mCallButton = (Button) findViewById(R.id.call_btn);
 
         mIncrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +84,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDecrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity>0){
+                if (quantity > 0) {
                     quantity = Integer.parseInt(mQuantity.getText().toString());
                     quantity--;
                     mQuantity.setText(Integer.toString(quantity));
                 }
-
             }
         });
 
@@ -131,22 +128,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberInt);
 
 
-        if (mcurrenturi==null){
-            Uri uri = getContentResolver().insert(BookEntry.CONTENT_URI,values);
-            if (uri==null){
+        if (mcurrenturi == null) {
+            Uri uri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            if (uri == null) {
                 Toast.makeText(this, "Insertion failed", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
             }
-        }else{
-            int rowsAffected = getContentResolver().update(BookEntry.CONTENT_URI,values,null,null);
-            if (rowsAffected==0){
+        } else {
+            int rowsAffected = getContentResolver().update(BookEntry.CONTENT_URI, values, null, null);
+            if (rowsAffected == 0) {
                 Toast.makeText(this, "Data Updated Failed", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(this, "Data Updated", Toast.LENGTH_SHORT).show();
             }
         }
 
+        finish();
     }
 
     @Override
@@ -163,20 +161,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             //Method to insert the data into database
             insertData();
-            finish();
+
         }
-        if (menuId==R.id.delete_btn){
+        if (menuId == R.id.delete_btn) {
             showDeleteConfirmationDialog();
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection={
+        String[] projection = {
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
@@ -198,11 +194,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         if (data == null || data.getCount() < 1) {
             return;
         }
 
-        if (data.moveToFirst()){
+        if (data.moveToFirst()) {
 
             int bookNameColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
             int bookPriceColumnIndex = data.getColumnIndex(BookEntry.COLUMN_PRICE);
@@ -253,8 +250,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
             }
         });
-
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

@@ -16,8 +16,8 @@ import com.example.android.bookstore.data.BookContract.BookEntry;
 
 public class BookCursorAdapter extends CursorAdapter {
 
-    private int bookQuantity;
-    private TextView bookQuantityTextView;
+
+
     private Context mContext;
 
 
@@ -39,7 +39,7 @@ public class BookCursorAdapter extends CursorAdapter {
 
         TextView bookNameTextView = (TextView) view.findViewById(R.id.book_name);
         TextView bookPriceTextView = (TextView) view.findViewById(R.id.book_price);
-        bookQuantityTextView = (TextView) view.findViewById(R.id.book_quantity);
+        TextView bookQuantityTextView = (TextView) view.findViewById(R.id.book_quantity);
         Button sale = (Button) view.findViewById(R.id.btn_sale);
 
         int bookIdColumnIndex = cursor.getColumnIndex(BookEntry._ID);
@@ -49,12 +49,12 @@ public class BookCursorAdapter extends CursorAdapter {
 
         final int bookId = cursor.getInt(bookIdColumnIndex);
         String bookName = cursor.getString(bookNameColumnIndex);
-        int bookPrice = cursor.getInt(bookPriceColumnIndex);
-        bookQuantity = cursor.getInt(bookQuantityColumnIndex);
+        final int[] bookPrice = {cursor.getInt(bookPriceColumnIndex)};
+        final int[] bookQuantity = {cursor.getInt(bookQuantityColumnIndex)};
 
         bookNameTextView.setText(bookName);
-        bookPriceTextView.setText(Integer.toString(bookPrice));
-        bookQuantityTextView.setText(Integer.toString(bookQuantity));
+        bookPriceTextView.setText(Integer.toString(bookPrice[0]));
+        bookQuantityTextView.setText(Integer.toString(bookQuantity[0]));
 
         /**
          * Sale Button Clicked
@@ -64,17 +64,15 @@ public class BookCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 mContext = context;
-                bookQuantity = cursor.getInt(bookQuantityColumnIndex);
-                if (bookQuantity > 0) {
-                    bookQuantity--;
+                if (bookQuantity[0] > 0) {
+
+                    bookQuantity[0]--;
                     Uri currentUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI,bookId);
                     ContentValues values = new ContentValues();
-                    values.put(BookEntry.COLUMN_QUANTITY,bookQuantity);
-                    mContext.getContentResolver().update(currentUri,values,null,null);
-                    bookQuantityTextView.setText(Integer.toString(bookQuantity));
+                    values.put(BookEntry.COLUMN_QUANTITY, bookQuantity[0]);
+                   mContext.getContentResolver().update(currentUri,values,null,null);
+
                 }
-
-
             }
         });
 

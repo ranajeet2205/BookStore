@@ -126,12 +126,12 @@ public class BookProvider extends ContentProvider {
             throw new IllegalArgumentException("Enter Book Name");
         }
 
-        String bookPrice = values.getAsString(BookEntry.COLUMN_PRICE);
+        Integer bookPrice = values.getAsInteger(BookEntry.COLUMN_PRICE);
         if (bookPrice==null){
             throw new IllegalArgumentException("Enter Book Price");
         }
 
-        String bookQuantity = values.getAsString(BookEntry.COLUMN_QUANTITY);
+        Integer bookQuantity = values.getAsInteger(BookEntry.COLUMN_QUANTITY);
         if (bookQuantity == null ){
             throw new IllegalArgumentException("Enter Book Quantity");
         }
@@ -201,32 +201,48 @@ public class BookProvider extends ContentProvider {
     }
 
     public int updateBook(Uri uri,ContentValues values,String selection,String[] selectionArgs){
+
         SQLiteDatabase database = bookDbHelper.getWritableDatabase();
 
-        String bookName = values.getAsString(BookEntry.COLUMN_PRODUCT_NAME);
-        if (bookName==null){
-            throw new IllegalArgumentException("Enter Book Name");
+        if (values.containsKey(BookEntry.COLUMN_PRODUCT_NAME)){
+            String bookName = values.getAsString(BookEntry.COLUMN_PRODUCT_NAME);
+            if (bookName==null){
+                throw new IllegalArgumentException("Enter Book Name");
+            }
         }
 
-        String bookPrice = values.getAsString(BookEntry.COLUMN_PRICE);
-        if (bookPrice==null){
-            throw new IllegalArgumentException("Enter Book Price");
+
+        if (values.containsKey(BookEntry.COLUMN_PRICE)){
+            String bookPrice = values.getAsString(BookEntry.COLUMN_PRICE);
+            if (bookPrice==null){
+                throw new IllegalArgumentException("Enter Book Price");
+            }
         }
 
-        String bookQuantity = values.getAsString(BookEntry.COLUMN_QUANTITY);
-        if (bookQuantity==null){
-            throw new IllegalArgumentException("Enter Book Quantity");
+
+        if (values.containsKey(BookEntry.COLUMN_QUANTITY)){
+            String bookQuantity = values.getAsString(BookEntry.COLUMN_QUANTITY);
+            if (bookQuantity==null){
+                throw new IllegalArgumentException("Enter Book Quantity");
+            }
         }
 
-        String supplierName = values.getAsString(BookEntry.COLUMN_SUPPLIER_NAME);
-        if (supplierName==null){
-            throw new IllegalArgumentException("Enter Supplier Name");
+
+        if (values.containsKey(BookEntry.COLUMN_SUPPLIER_NAME)){
+            String supplierName = values.getAsString(BookEntry.COLUMN_SUPPLIER_NAME);
+            if (supplierName==null){
+                throw new IllegalArgumentException("Enter Supplier Name");
+            }
         }
 
-        String supplierPhoneNumber = values.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-        if (supplierPhoneNumber==null){
-            throw new IllegalArgumentException("Enter Supplier Phone Number");
+
+        if (values.containsKey(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER)){
+            String supplierPhoneNumber = values.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            if (supplierPhoneNumber==null){
+                throw new IllegalArgumentException("Enter Supplier Phone Number");
+            }
         }
+
 
         if (values.size() == 0) {
             return 0;

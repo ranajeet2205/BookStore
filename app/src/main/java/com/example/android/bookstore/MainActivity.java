@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int BOOK_LOADER = 0;
 
     BookCursorAdapter mCursorAdapter;
+
     ListView bookListView;
 
     @Override
@@ -126,5 +127,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mCursorAdapter.swapCursor(null);
     }
 
-
+    @Override
+    protected void onStart() {
+        bookListView.setAdapter(null);
+        bookListView.setAdapter(mCursorAdapter);
+        super.onStart();
+    }
 }
