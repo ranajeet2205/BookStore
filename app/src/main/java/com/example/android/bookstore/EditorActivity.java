@@ -13,8 +13,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,6 +43,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button mDecrementButton;
 
     private Button mCallButton;
+
+    int quantity;
 
     public static final int EXISTING_BOOK_LOADER=0;
 
@@ -70,6 +74,38 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDecrementButton = (Button)findViewById(R.id.negative_btn);
         mCallButton = (Button)findViewById(R.id.call_btn);
 
+        mIncrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quantity = Integer.parseInt(mQuantity.getText().toString());
+                quantity++;
+                mQuantity.setText(Integer.toString(quantity));
+            }
+        });
+
+        mDecrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (quantity>0){
+                    quantity = Integer.parseInt(mQuantity.getText().toString());
+                    quantity--;
+                    mQuantity.setText(Integer.toString(quantity));
+                }
+
+            }
+        });
+
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mSupplierPhoneNumber.getText().toString()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     private void insertData() {
@@ -94,14 +130,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberInt);
 
-//        long newRowId = database.insert(BookEntry.TABLE_NAME, null, values);
-//
-//        if (newRowId == -1) {
-//            Toast.makeText(this, "Error With Saving The data", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
 
         if (mcurrenturi==null){
             Uri uri = getContentResolver().insert(BookEntry.CONTENT_URI,values);

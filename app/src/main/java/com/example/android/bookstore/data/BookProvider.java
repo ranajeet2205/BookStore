@@ -132,7 +132,7 @@ public class BookProvider extends ContentProvider {
         }
 
         String bookQuantity = values.getAsString(BookEntry.COLUMN_QUANTITY);
-        if (bookQuantity==null){
+        if (bookQuantity == null ){
             throw new IllegalArgumentException("Enter Book Quantity");
         }
 

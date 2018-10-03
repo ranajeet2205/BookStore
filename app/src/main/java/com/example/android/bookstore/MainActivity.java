@@ -1,6 +1,7 @@
 package com.example.android.bookstore;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bookstore.data.BookContract.BookEntry;
 import com.example.android.bookstore.data.BookDbHelper;
@@ -40,11 +42,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         ListView bookListView = (ListView) findViewById(R.id.list);
-
-
-//        View emptyView = findViewById(R.id.empty_view);
-//        bookListView.setEmptyView(emptyView);
-
 
         mCursorAdapter = new BookCursorAdapter(this, null);
 
@@ -73,7 +70,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
-
+    @Override
+    protected void onStart() {
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
+        super.onStart();
+    }
 
     public void deleteAllData() {
         int rowDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
@@ -129,4 +130,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mCursorAdapter.swapCursor(null);
     }
+
+
 }
